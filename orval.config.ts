@@ -15,7 +15,6 @@ export default defineConfig({
       httpClient: "axios",
       schemas: "schemas",
       workspace: "dist",
-      mode: "tags-split",
       mock: {
         type: "msw",
         generateEachHttpStatus: true,

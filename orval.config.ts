@@ -7,7 +7,6 @@ export default defineConfig({
     },
     output: {
       target: "index.ts",
-      client: "react-query",
       httpClient: "axios",
       schemas: "schemas",
       workspace: "dist",

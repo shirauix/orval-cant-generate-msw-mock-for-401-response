@@ -5,19 +5,8 @@
  * Login
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation
-} from '@tanstack/react-query';
-import type {
-  MutationFunction,
-  QueryClient,
-  UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query';
-
 import axios from 'axios';
 import type {
-  AxiosError,
   AxiosRequestConfig,
   AxiosResponse
 } from 'axios';
@@ -40,68 +29,16 @@ import type {
   LoginResponse
 } from './schemas';
 
-type AwaitedInput<T> = PromiseLike<T> | T;
-
-      type Awaited<O> = O extends AwaitedInput<infer T> ? T : never;
-
-
-
-
-export const login = (
+export const login = <TData = AxiosResponse<LoginResponse>>(
     loginRequest: LoginRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<LoginResponse>> => {
-    
-    
+ ): Promise<TData> => {
     return axios.post(
       `/user/login`,
       loginRequest,options
     );
   }
 
-
-
-export const getLoginMutationOptions = <TError = AxiosError<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginRequest}, TContext> => {
-    
-const mutationKey = ['login'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof login>>, {data: LoginRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  login(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type LoginMutationResult = NonNullable<Awaited<ReturnType<typeof login>>>
-    export type LoginMutationBody = LoginRequest
-    export type LoginMutationError = AxiosError<void>
-
-    export const useLogin = <TError = AxiosError<void>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof login>>, TError,{data: LoginRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof login>>,
-        TError,
-        {data: LoginRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getLoginMutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
+export type LoginResult = AxiosResponse<LoginResponse>
 
 
 export const getLoginResponseMock = (overrideResponse: Partial< LoginResponse > = {}): LoginResponse => ({access_token: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), refresh_token: faker.helpers.arrayElement([faker.string.alpha(20), undefined]), ...overrideResponse})
@@ -147,6 +84,5 @@ export const getLoginMockHandler400 = (overrideResponse?: void | ((info: Paramet
   })
 }
 export const getLoginApiMock = () => [
-  getLoginMockHandler()
-]
+  getLoginMockHandler()]
 export * from './index';

@@ -4,10 +4,6 @@ export default defineConfig({
   compass: {
     input: {
       target: "src/schema/login-api.yaml",
-      filters: {
-        mode: "include",
-        tags: ["user"],
-      },
     },
     output: {
       target: "index.ts",
